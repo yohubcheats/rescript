@@ -14,20 +14,13 @@ else
 fi
 
 exit_watcher() { 
-  # Try to find parent process, if not found just kill the process directly
-  # PARENT_PROCS=$(pgrep -P $!)
-  # if [ -n "$PARENT_PROCS" ]; then
-  #   kill $PARENT_PROCS &>/dev/null
-  # fi
-  # for if it's the node script that runs rewatch also kill the child processes
+  # Try to find child process, if not found just kill the process directly
   CHILD_PROCS=$(pgrep -f rewatch)
   if [ -n "$CHILD_PROCS" ]; then
-    kill $! &>/dev/null
     kill $CHILD_PROCS &>/dev/null
-  else
-    # Last resort: just kill the background process
-    kill $!
   fi
+  # for if it's the node script that runs rewatch also kill the child processes
+  kill $!
 }
 
 rewatch watch &>/dev/null &
